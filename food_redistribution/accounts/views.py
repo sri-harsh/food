@@ -11,25 +11,65 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 from .models import *
-from .forms import CreateUserForm
+from .forms import RestuarantUserForm, FoodRedistributorUserForm
 
-def registerPage(request):
+
+def register_restaurant(request):
 	if request.user.is_authenticated:
 		return redirect('home')
 	else:
-		form = CreateUserForm()
+		form = RestuarantUserForm(request.POST)
 		if request.method == 'POST':
-			form = CreateUserForm(request.POST)
 			if form.is_valid():
-				form.save()
-				user = form.cleaned_data.get('username')
-				messages.success(request, 'Account was created for ' + user)
-
+				user = form.save(commit=False)
+				user.is_active = False
+				user.save()
+				user_profile = Restaurat(user=user)
+				name = form.cleaned_data.get('username')
+				messages.success(request, f'Success! Account created for {name}')
+				profile.save()
 				return redirect('login')
-			
 
 		context = {'form':form}
-		return render(request, 'accounts/register.html', context)
+		return render(request, "register/restaurant_register.html", {"form": form})
+
+def register_food_redistributor(request):
+	if request.user.is_authenticated:
+		return redirect('home')
+	else:
+		form = FoodRedistributorUserForm(request.POST)
+		if request.method == 'POST':
+			if form.is_valid():
+				user = form.save(commit=False)
+				user.is_active = False
+				user.save()
+				user_profile = FoodRedistributor(user=user)
+				name = form.cleaned_data.get('username')
+				messages.success(request, f'Success! Account created for {name}')
+				profile.save()
+				return redirect('login')
+
+		context = {'form':form}
+		return render(request, "register/food_redistributor_register.html", {"form": form})
+
+
+# def registerPage(request):
+# 	if request.user.is_authenticated:
+# 		return redirect('home')
+# 	else:
+# 		form = CreateUserForm()
+# 		if request.method == 'POST':
+# 			form = CreateUserForm(request.POST)
+# 			if form.is_valid():
+# 				form.save()
+# 				user = form.cleaned_data.get('username')
+# 				messages.success(request, 'Account was created for ' + user)
+
+# 				return redirect('login')
+			
+
+# 		context = {'form':form}
+# 		return render(request, 'accounts/register.html', context)
 
 def loginPage(request):
 	if request.user.is_authenticated:
