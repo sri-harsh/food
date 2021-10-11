@@ -1,6 +1,9 @@
-from django.contrib import admin
-from .models import Restaurant, FoodRedistributor, Individual
 
-admin.site.register(Restaurant)
+from django.contrib import admin
+
+# Register your models here.
+from .models import FoodRedistributor, Restaurant
+
 admin.site.register(FoodRedistributor)
-admin.site.register(Individual)
+admin.site.register(Restaurant)
+
